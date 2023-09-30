@@ -32,6 +32,24 @@ app.get('/api/blog-stats', async (req, res) => {
     res.send(analyticsResult);
 })
 
+app.get('/api/blog-search', async (req, res) => {
+    const query = req.query.query;
+
+    if(!query){
+        res.status(400).json({error: "Query parameter is missing"})
+        return;
+    }
+
+    const response = await axios.get(blogURL, { headers });
+    const blogData = response.data.blogs;
+
+    const searchResults = _.filter(blogData, (blog) => 
+     _.includes(blog.title, query)
+    );
+
+    res.send(searchResults);
+})
+
 
 
 app.listen(port, () => {
